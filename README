@@ -1,0 +1,96 @@
+NAME
+    stat_agent.pl - dim_STAT monitoring agent
+
+SCRIPT CATEGORIES
+    UNIX/System_administration
+
+PREREQUISITES
+    This script requires "IO::Socket" and "Getopt::Long"
+
+OSNAMES
+    "linux" and all UNIX systems
+
+SYNOPSIS
+     stat_agent.pl -f access_file [-p port] [-l logfie] [-d] [-v]
+
+     stat_agent --port 5000 -f access
+
+README
+    This script can be used as a replacement of the original dim_STAT
+    STATsrv monitoring agent.
+
+DESCRIPTION
+    This script opens the specified TCP port and waits for connections of
+    the dim_STAT server.
+
+    This script was tested with dim_STAT Version 8.2.
+
+    Improvements:
+
+    * Platform independent
+      Should run under all UNIX/Linux systems.
+
+    * More restricted security behavior
+
+      - The access file is checked if specified command is executable
+         (if not it's not added to the executable command stack).
+
+      - All special characters in the command parameter are deleted
+         (except '_', '/', '-' and ' ').
+
+      - It's possible specify a user for each executable command.
+
+    The options are as follows:
+
+    "--port, -p"
+                TCP port (default 5000)
+
+    "--file, -f"
+                Command access file with the usually STATsrv syntax, e.g.:
+
+                  # Usable from any hosts
+                  command  vmstat      /usr/bin/vmstat    
+                  # Usable from .50 and .51 only 
+                  access 10.10.10.50
+                  access 10.10.10.51
+                  command  mpstat      /usr/bin/mpstat    
+                  command  netstat     /usr/bin/netstat   
+
+                To execute a command by a specific user the following syntax
+                has to be used:
+
+                  command  jack:netstat   /usr/bin/netstat    
+                  command  jane:mpstat    /usr/bin/mpstat
+
+                To do so the current user must be allowed to "su" to the
+                specified user without a password.
+
+    "--daemon, -d"
+                Run program as unix daemon
+
+    "--log, -l" Specifies the log file (default STDOUT)
+
+    "--verbose, -v"
+                Verbose mode
+
+INSTALLATION
+    To replace the existing STATsrv agent with this version shutdown all
+    running STATsrv agents and copy the stat-agent.pl script to your STATsrv
+    installation:
+
+      /etc/STATsrv/STAT-service stop
+      cp stat-agent.pl /etc/STATsrv/bin
+
+    Replace the old STAT-service script with this one:
+
+      cp STAT-service /etc/STATsrv
+
+SEE ALSO
+    The dim_STAT project: http://dimitrik.free.fr/
+
+COPYRIGHT
+    Copyright (C) 2009 by Marc Koderer/LHS Telekommunikations GmbH & Co. KG
+
+    This program is free software; you can redistribute it and/or modify it
+    under the terms of the GNU General Public License.
+

@@ -1,0 +1,36 @@
+#!/bin/sh
+#
+# stat_agent-service 
+#
+LD_LIBRARY_PATH=/etc/STATsrv/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH
+port=5000
+log=/var/STATsrv/log/stat-agent.log
+
+case "$1" in
+  'start')
+            echo "Start stat_agent.pl..."
+            echo "\tPort: $port"
+            echo "\tLog file: $log"
+
+            /etc/STATsrv/bin/stat_agent.pl -p $port -d -l $log 
+
+            ;;
+
+  'stop')
+            echo "Stop stat_agent..."
+            kill `cat stat_agent_$port.pid`
+            ;;
+
+  'stop-all')
+            echo "Stoping all stat_agent servers..."
+            PIDS=`find /tmp/ -name stat_agent_* 2>/dev/null -exec cat {} \;`
+            kill $PIDS
+            ;;
+
+   *)
+            echo "Usage: $0 { start | stop | stop-all}"
+            exit 1
+
+esac
+exit 0
