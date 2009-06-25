@@ -149,7 +149,7 @@ This program is free software; you can redistribute it and/or modify it under th
 use strict;
 use IO::Socket;
 use Getopt::Long;
-our $VERSION = '0.09';
+our $VERSION = '0.10';
 my $SOCK_BUF = 1024;
 my $verbose = 0;
 my $port = 5000;
